@@ -39,16 +39,16 @@
                     </group>
                 </xpath>
 
-                <!-- Insert patient ID in form view -->
+                <!-- Insert patient ID in form view
                 <xpath expr="//sheet/div/div/h1" position="after">
                     <group>
                         <field name="identification_code" class="oe_inline"/>
                     </group>
-                </xpath>
+                </xpath>-->
             </field>
         </record>
 
-        <record id="oeha_medical_lab_test_tree" model="ir.ui.view">
+       <!-- <record id="oeha_medical_lab_test_tree" model="ir.ui.view">
             <field name="name">Extensions to Lab test tree view</field>
             <field name="model">oeh.medical.lab.test</field>
             <field name="inherit_id" ref="oehealth.oeh_medical_lab_test_tree"/>
@@ -57,7 +57,7 @@
                     <field name="identification_code"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
 
         <record id="oeha_medical_lab_test_types_form" model="ir.ui.view">
@@ -79,7 +79,7 @@
             <field name="arch" type="xml">
                 <field name="name" position="after">
                     <field name="patient" string="Patient" select="1"/>
-                    <field name="identification_code" string="Patient ID" select="1"/>
+                    <!--<field name="identification_code" string="Patient ID" select="1"/>-->
                 </field>
             </field>
         </record>
