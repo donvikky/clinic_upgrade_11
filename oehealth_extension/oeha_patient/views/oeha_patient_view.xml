@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+    <odoo>
+
+        <!-- Extensions to the patient view -->
+        <record id="oeha_medical_patient_view" model="ir.ui.view">
+            <field name="name">Extensions to Patient Form</field>
+            <field name="model">oeh.medical.patient</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_patient_view"/>
+            <field name="arch" type="xml">
+                <!-- replace name field, make readonly -->
+                <field name="name" position="replace">
+                    <field name="name" readonly="True"/>
+                </field>
+
+                <!-- replace identity field, include surname, first name and middle name-->
+                <xpath expr="//sheet/group[1]" position="replace">
+                    <group name="identity_fields">
+                        <group>
+                            <field name="firstname" required="True"/>
+                            <field name="lastname2"/>
+                            <field name="age"/>
+                            <field name="blood_type"/>
+                            <field name="sex" required="1"/>
+                            <field name="property_product_pricelist"/>
+                        </group>
+                        <group>
+                            <field name="lastname" required="True"/>
+                            <field name="dob" required="1"/>
+                            <field name="marital_status"/>
+                            <field name="rh"/>
+                            <field name="doctor" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                
+                <div name="buttons" position="replace">  
+                    <div class="oe_button_box" name="buttons">
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_appointment_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-calendar-alt">
+                            <field string="Appointments" name="app_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_evaluation_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-user-md"
+                            groups="oehealth.group_oeh_medical_patient,oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician"
+                        >
+                            <field string="Evaluations" name="evaluation_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_prescription_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-prescription-bottle-alt"
+                            groups="oehealth.group_oeh_medical_patient,oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician"
+                        >
+                            <field string="Prescriptions" name="prescription_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_lab_test_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-vials"
+                            groups="oehealth.group_oeh_medical_patient,oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician"
+                        >
+                            <field string="Lab Tests" name="labs_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_vaccine_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}"  icon="fa-list"
+                            groups="oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician,oehealth_extension.group_oeh_medical_lab_off"
+                        >
+                            <field string="Vaccines" name="vaccine_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_inpatient_action_tree)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-building-o"
+                            groups="oehealth.group_hide_menus"
+                        >
+                            <field string="Admissions" name="admission_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(account.action_invoice_tree1)d" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-edit">
+                            <field string="Invoices" name="invoice_count" widget="statinfo"/>
+                        </button>                           
+                    </div>
+                </div>
+
+                <!-- Add fields for next of kin -->
+                <xpath expr="//sheet/notebook/page[1]/group[2]" position="after">
+                    <group name="next_of_kin">
+                        <group>
+                            <field name="next_of_kin" placeholder="Next of kin"/>
+                        </group>
+                        <group>
+                            <field name="next_of_kin_contact" placeholder="Next of kin contact number"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <!-- Add field for children -->
+                <xpath expr="//sheet/notebook/page[8]" position="after">
+                    <page string="Children">
+                        <group>
+                            <field name="children"/>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+        
+        <!-- Move physician action tree to under conf menu -->
+        <menuitem action="oehealth.oeh_medical_physician_action_tree" id="oehealth.oeh_medical_physician_list" parent="oehealth.oeh_medical_conf_physician" 
+        sequence="1"/>
+
+        <menuitem action="oehealth.oeh_medical_patient_action_tree" parent="oehealth.oeh_medical_patients_menu"  id="oehealth.oeh_medical_edit_patient"
+         sequence="1" groups="oehealth_extension.group_oeh_medical_nurse,oehealth_extension.group_oeh_medical_op_ass"/>
+    </odoo>

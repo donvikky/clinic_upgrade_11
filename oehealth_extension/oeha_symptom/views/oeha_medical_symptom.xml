@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <!-- Symptom Categories Management -->
+
+        <record id="view_oeha_medical_symptom_category_filter" model="ir.ui.view">
+            <field name="name">Symptom Categories</field>
+            <field name="model">oeha.medical.symptom.category</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Symptom Categories">
+                    <separator orientation="vertical"/>
+                        <field name="name" select="1"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="oeha_medical_symptom_category_tree">
+            <field name="name">Symptom Categories</field>
+            <field name="model">oeha.medical.symptom.category</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string='Symptom Categories'>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="oeha_medical_symptom_category_form">
+            <field name="name">Symptom Categories</field>
+            <field name="model">oeha.medical.symptom.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Symptom Categories">
+                    <sheet>
+                        <div class="oe_left" style="width: 500px;">
+                            <div class="oe_title" style="width: 390px;">
+                                <label class="oe_edit_only" for="name"/>
+                                <h1><field name="name" class="oe_inline"/></h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="description"/>
+                            </group>
+                        </group>                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="oeha_medical_symptom_category_action_tree" model="ir.actions.act_window">
+            <field name="name">Symptom Categories</field>
+            <field name="res_model">oeha.medical.symptom.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new symptom category types.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="oeha_medical_symptom_category_action_tree" id="oeh_medical_symptoms_category_conf_list" parent="oeh_medical_conf_symptom"
+         sequence="2" groups="oehealth.group_oeh_medical_manager"/>
+
+
+        <!-- Symptoms  -->
+
+        <record id="view_oeha_medical_symptom_filter" model="ir.ui.view">
+            <field name="name">Symptoms</field>
+            <field name="model">oeha.medical.symptom</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Symptoms">
+                    <separator orientation="vertical"/>
+                        <field name="name" select="1"/>
+                        <field name="category" select="1"/>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="11" col="11">
+                        <filter name="group_symptom" string="Symptom" icon="terp-personal" domain="[]" context="{'group_by':'name'}"/>
+                        <filter name="group_category" string="Category" icon="terp-personal" domain="[]" context="{'group_by':'category'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="oeha_medical_symptom_tree">
+            <field name="name">Symptoms</field>
+            <field name="model">oeha.medical.symptom</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string='Symptoms'>
+                    <field name="name"/>
+                    <field name="category"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="oeha_medical_symptom_form">
+            <field name="name">Symptoms</field>
+            <field name="model">oeha.medical.symptom</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Symptoms">
+                    <sheet>
+                        <div class="oe_left" style="width: 500px;">
+                            <div class="oe_title" style="width: 390px;">
+                                <label class="oe_edit_only" for="name"/>
+                                <h1><field name="name" class="oe_inline"/></h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="category"/>
+                                <field name="description"/>
+                            </group>
+                        </group>                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="oeha_medical_symptom_action_tree" model="ir.actions.act_window">
+            <field name="name">Symptoms</field>
+            <field name="res_model">oeha.medical.symptom</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new symptom.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="oeha_medical_symptom_action_tree" id="oeh_medical_symptoms_conf_list" parent="oeh_medical_conf_symptom" sequence="5"
+        groups="oehealth.group_oeh_medical_manager"/>
+
+    </data>
+</odoo>

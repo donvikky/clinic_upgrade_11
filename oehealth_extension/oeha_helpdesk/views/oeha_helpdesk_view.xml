@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<odoo>
+        <data>
+	
+		<!-- Helpdesk -->
+
+			<record id="oehealth_ticket_view_form" model="ir.ui.view">
+		        <field name="name">oehealth.ticket.form</field>
+		        <field name="model">helpdesk.ticket</field>
+		        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+		        <field name="arch" type="xml">
+
+                    <!-- buttons for assigning to different teams -->
+                    <button name="assign_ticket_to_self" position="after">
+                        <button type="object" name="assign_to_front_desk_team" string="Assign to Frontdesk"/>
+                        <button type="object" name="assign_to_nurse_team" string="Assign to Nurses"/>
+                        <button type="object" name="assign_to_doctor_team" string="Assign to Doctors"/>
+                        <button type="object" name="assign_to_lab_team" string="Assign to Lab Scientists"/>
+                        <button type="object" name="assign_to_pharmacy_team" string="Assign to Pharmacists"/>
+                    </button>
+
+			        <xpath expr="//button[@name='open_customer_tickets']" position="after">
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_appointment_action_tree)d" groups="oehealth_extension.group_oeh_medical_op_ass,oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician" context="{'search_default_patient': patient_id,'default_patient': patient_id,'search_default_ticket_id': active_id,'default_ticket': active_id}" icon="fa-calendar-alt">
+                            <field string="Appointments" name="app_count" widget="statinfo"/>
+                        </button>
+			        	<button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_evaluation_action_tree)d" groups="oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician" context="{'search_default_patient': patient_id,'default_patient': patient_id,'search_default_ticket_id': active_id,'default_ticket': active_id}" icon="fa-user-md">
+                            <field string="Evaluations" name="eval_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_prescription_action_tree)d" groups="oehealth_extension.group_oeh_medical_nurse,oehealth.group_oeh_medical_physician" context="{'search_default_patient': patient_id,'default_patient': patient_id,'search_default_ticket_id': active_id,'default_ticket': active_id}" icon="fa-prescription-bottle-alt">
+                            <field string="Prescriptions" name="prescription_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_lab_test_action_tree)d" groups="oehealth_extension.group_oeh_medical_nurse,oehealth_extension.group_oeh_medical_lab_off,oehealth.group_oeh_medical_physician" context="{'search_default_patient': patient_id,'default_patient': patient_id}" icon="fa-vials">
+                            <field string="Lab Tests" name="labs_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(oehealth.oeh_medical_vaccine_action_tree)d" context="{'search_default_patient': patient_id,'default_patient': patient_id,'search_default_ticket_id': active_id,'default_ticket': active_id}" groups="oehealth.group_hide_menus" icon="fa-list">
+                            <field string="Vaccines" name="vaccine_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" groups="oehealth.group_hide_menus" name="%(oehealth.oeh_medical_inpatient_action_tree)d" context="{'search_default_patient': patient_id,'default_patient': patient_id,'search_default_ticket_id': active_id,'default_ticket': active_id}" icon="fa-building-o">
+                            <field string="Admissions" name="admission_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(account.action_invoice_tree1)d" groups="oehealth_extension.group_oeh_medical_op_ass" context="{'search_default_patient': active_id,'default_patient': active_id}" icon="fa-pencil-square-o">
+                            <field string="Invoices" name="invoice_count" widget="statinfo"/>
+                        </button>
+			        </xpath>
+			        <field name="partner_id" position="replace">
+			        	<field name="partner_id"/>
+			        	<field name="patient_id"/>
+			        </field>
+
+                    <field name="priority" position="after">
+                        <field name="dob"/>
+                        <field name="phone"/>
+                        <field name="payer_type" readonly="True"/>
+                    </field>
+		        </field>
+		   </record>
+
+        </data>
+</odoo>

@@ -1,0 +1,978 @@
+<?xml version="1.0"?>
+    <odoo>
+        <record id="oeha_medical_evaluation_view" model="ir.ui.view">
+            <field name="name">Extensions to Evaluation Form</field>
+            <field name="model">oeh.medical.evaluation</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_evaluation_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button confirm="Are you sure you want to complete this evaluation?"
+                        name="set_to_completed" states="In Progress" string="Complete Evaluation"
+                        type="object" class="oe_highlight"
+                        groups="oehealth.group_oeh_medical_physician"
+                        />
+                        <field name="state" widget="statusbar" statusbar_visible="In Progress,Completed" statusbar_colors='{"Completed":"red","In Progress":"grey"}'/>
+                    </header>
+                </xpath>
+
+                <field name="indication" position="replace">
+                    <field name="indication" widget="many2many_tags" options="{'no_create': True}" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                </field>
+
+                <xpath expr="//sheet/group[1]" position="replace">
+                    <group>
+                        <group>
+                            <field name="doctor" options="{'no_create': True}" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="evaluation_start_date" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="appointment" domain="[('patient', '=', patient)]" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="evaluation_type" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="evaluation_end_date" invisible="True"/>
+                            <field name="chief_complaint" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//sheet/notebook/page[1]" position="replace">
+                    <page string="Vital Signs and Anthropometry" name="vital_signs">
+                        <group string="Vital Signs">
+                            <group>
+                                <field name="temperature" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="diastolic" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="respiratory_rate" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="systolic" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="bpm" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="osat" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Anthropometry">
+                            <group>
+                                <field name="weight" on_change="onchange_height_weight(height,weight)" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="abdominal_circ" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="bmi" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="height" on_change="onchange_height_weight(height,weight)" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                                <field name="head_circumference" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>                                    
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook/page[2]" position="replace">
+                    <page name="Symptoms" invisible="True">
+                    
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook/page[3]" position="replace">
+                    <page name="Mental Status" invisible="True">
+                    
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook/page[1]" position="after">
+                    <page string="Nurse Assessment">
+                        <group>
+                        <group string="Nutrition">
+                            <field name="diet" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="recent_weight_change" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="conditions_affecting_ecs" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="mucous_membranes" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Skin Condtion">
+                            <field name="skin" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="skin_intact" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="special_care" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="wound_assessment" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        </group>
+                        
+                        <group>
+                        <group string="Neuro">
+                            <field name="level_of_consciousness" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="seizure_tremor_fainting" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="difficulty_in_orientation" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="sensation" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="memory_deficit" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="impaired_decision_making" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="sleep_aids" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Pain/Discomfort">
+                            <field name="pain" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="pain_score" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="location" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="frequency" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="duration" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="treatment" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        </group>
+
+                        <group>
+                        <group string="Respiration">
+                            <field name="respirations" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="breath_sounds" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="shorthess_of_breath" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="shorthess_of_breath_trigger" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="cough" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="cough_type" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="respiratory_treatment" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Cardiovascular / Circulation">
+                            <field name="history" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="pulse" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="edema" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="explain_edema" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="chest_pain" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="explain_chest_pain" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        </group>
+
+                        <group>
+                        <group string="Gastrointestinal System">
+                            <field name="gastrointestinal_bleeding" domain="[('category','=','Gastrointestinal')]" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_diarrhea" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_constipation" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_vomiting" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_nausea" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_gastrostomy" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_enteral_tube" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="gastrointestinal_abdominal_pain" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="change_in_appetite" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="explain_change_in_appetite" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="bowel_sounds" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="bowel_movement" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Genitourinary">
+                            <field name="bladder_control" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="bladder_frequency" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="blood_in_urine" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="difficulty_urinating" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="nocturnia" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="indwelling_catheter" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        </group>
+
+                        <group>
+                        <group string="Musculoskeletal">
+                            <field name="mobility" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="assistive_devices" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="range_of_motion" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="activities_of_daily" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Sensory">
+                            <field name="vision" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="corrective_device" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="hearing" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="hearing_aid" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        </group>
+                        <group>
+                            <field name="nursing_assessment_notes"/>
+                        </group>
+                    </page>
+                    <page string="Current Medications">
+                        <group string="Allergies">
+                            <field name="allergies" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="allergy_cause" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                            <field name="allergic_reaction_seen" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group>
+                            <field name="current_medication" widget="radio" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="List of Current Medications">
+                            <field name="currentmedications" widget="one2many_list" attrs="{'readonly':[('state', 'in', ['Completed'])]}">
+                                <form string="Current Medications">
+                                    <group>
+                                        <group>
+                                            <field name="name" />
+                                            <field name="start_date" />
+                                            <field name="route" />
+                                            <field name="frequency" />
+                                        </group>
+                                        <group>
+                                            <field name="dose" />
+                                            <field name="dose_unit" />
+                                            <field name="dose_form" />
+                                            <field name="qty" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="Current Medications">
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="dose"/>
+                                    <field name="dose_unit" />
+                                    <field name="dose_form"/>
+                                    <field name="qty" />
+                                    <field name="route" />
+                                    <field name="frequency" />
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="other_medications" attrs="{'readonly':[('state', 'in', ['Completed'])]}"/>
+                        </group>
+                    </page>                    
+                </xpath>
+
+				<xpath expr="//sheet/notebook/page[4]" position="replace">
+                    <page string="Clinical Evaluation" name="clinical_evaluation">
+                        <group>
+                            <field name="can_edit" groups="oehealth.group_oeh_medical_physician"/>
+                        </group>
+                        
+                        <group string="General">                            
+                            <newline/>
+                            <group string="Symptoms">
+                                <field name="general_symptom_fever" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_malaise" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_joint_ache" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_dizziness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_chills" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_night_sweats" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_weight" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_easy_fatigability" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <separator string="Pain"/>
+                                <field name="general_symptom_pain_site" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_onset" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_character" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_severity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_radiation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_aggravating" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_relieving" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_associated" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_pain_possible_etiology" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <separator string="Swelling"/>
+                                <field name="general_symptom_swelling_site"/>
+                                <field name="general_symptom_swelling_progression" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_associated_pain" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_itchy" attrs="{'readonly' : [('state', 'in', ['|',('can_edit','=',False),'Completed'])]}"/>
+                                <field name="general_symptom_swelling_associated_symptom" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_possible_etiology" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_left_breast_lump" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_right_breast_lump" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_rash" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_symptom_swelling_rash_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="general_sign_unwell" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_acutely_ill" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_chronically_ill" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_wasted" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_stunted" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_fluffy_hair" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_pallor" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_jaundice" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_central_cyanosis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_dehydration" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_digital_clubbing" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_peripheral_cyanosis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_simian_crease" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <separator string="Peripheral lymphadenopathy" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_peripheral_lymph_site" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_peripheral_lymph_character" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_peripheral_lymph_changes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_pedal_edema" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <separator string="Rashes"/>
+                                <field name="general_sign_rashes_location" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_rashes_nature" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <separator string="Swelling"/>
+                                <field name="general_sign_swelling_site" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_size" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_consistency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_overlying_skin" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_attached_to_skin" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_attached_to_underlying" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_differential_warmth" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_mobile" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_fluctuant" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_swelling_pulsatile" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="general_sign_additional_findings" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Central Nervous System">                            
+                            <newline/>
+                            <group string="symptoms">
+                                <separator string="Headaches"/>
+                                <field name="cns_symptom_headache_nature" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_side" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_radiation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_severity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_associated_symptoms" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_aggravating_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_relieving_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_headache_aura" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                
+                                <field name="cns_symptom_limb_weakness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_blurry_vision" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_insomnia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_convulsion" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_amnesia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_sphincteric_disturbance" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_symptom_limb_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="cns_sign_conscious" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_unconscious" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Orientation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_orientation_oriented" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_orientation_not_oriented" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                
+                                <separator string="Glasgow Coma Score" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_glasgow_coma_score_eye_opening_score" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_glasgow_coma_score_motor_score" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_glasgow_coma_score_verbal_score" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                
+                                <field name="cns_sign_cranial_nerve_deficits" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_fasciculations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_right_upper_limb" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_right_lower_limb" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_left_upper_limb" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_left_lower_limb" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_babinski_reflex" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_ankle_clonus" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_loss_of_sensation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_gait" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+
+                                <field name="cns_sign_dysdiadochokinesis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_intention_tremor" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_rebound_phenomena" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_dysmetria" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_nystagmus" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_dysarthria" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_titubation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_torticollis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_romberg_sign" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="cns_sign_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <separator string="Musculoskeletal system"/>
+                            <newline/>
+                            <group string="symptoms">
+                                <field name="symptom_muscle_low_back_pains" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_muscle_muscle_aches" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_muscle_bone_pains" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_muscle_fractures" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_muscle_dislocations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_muscle_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_muscle_fractures" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_dislocation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_scoliosis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_lordosis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_kyphosis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_genu_valga" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_genu_vara" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_windswept_deformity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_clubfoot" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_amputations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_muscle_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <separator string="Respiratory system"/>
+                            <newline/>
+                            <group string="symptoms">
+                                <field name="symptom_respiratory_coryza" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_cough" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_sore_throat" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_difficulty_with_breathing" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_breathlessness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_fast_breathing" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_mouth_breathing" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_noisy_breathing" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_night_sweats" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_orthopnea" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_paroxysmal_nocturnal_dypsnea"/>
+                                <field name="symptom_respiratory_haemoptysis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_hoarseness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_stridor" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_snoring" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_nasal_stuffiness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_respiratory_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_respiratory_respiratory_distress" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_nasal_stuffiness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_pursed_lip" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_hepatic_fetor" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_barrel_chest" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_pigeon_chest" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_funnel_chest" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_scarification_marks" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_rickety_rosary" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_uniform_chest_expansion" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_tracheal_deviation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_reduced_expansion" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_resonant_percussion_note" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_hyperresonant_percussion_note" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_dull_percussion_note" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_stony_dull_percussion_note" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_vesicular_breath_sounds" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_crepitations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_fine_crackles" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_coarse_crackles" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_respiratory_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Cardiovascular system">                            
+                            <newline/>
+                            <group string="Symptoms">
+                                <separator string="Chest Pain"/>
+                                <field name="symptom_cardio_chest_pain_site" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_onset" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_severity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_nature" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_radiation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_duration" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_aggravating_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_relieving_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_chest_pain_associated_symptoms" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_palpitations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_claudication" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_cardio_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_cardio_cold_extremities" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_bruits" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_splinter_hemorrhage" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_osler_nodes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_janeway_nodes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_rhythm" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_synchronicity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_thickened_arterial_wall" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_locomotor_brachialis" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_jvp" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_apex_beat" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_heart_sounds" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_heart_murmurs" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_cardio_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Abdomen">                            
+                            <newline/>
+                            <group string="Symptoms">
+                                <separator string="Abdominal Pains"/>
+                                <newline/>
+                                <field name="symptom_abdomen_abdominal_site" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_onset" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_nature" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_duration" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_relieving_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_aggravating_factors" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_severity" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_radiation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_abdominal_associated_symptoms" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_distension" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_nausea" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Vomiting"/>
+                                <newline/>
+                                <field name="symptom_abdomen_vomitting_frequency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_vomitting_colour" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_vomitting_projectile" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_vomitting_bilious" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_vomitting_feculent" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_haematemesis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_dysphagia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_indigestion" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_dyspepsia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_reflux" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Diarrhea"/>
+                                <newline/>
+                                <field name="symptom_abdomen_diarrhea_frequency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_diarrhea_Watery" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_diarrhea_mucoid" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_diarrhea_bloody" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_diarrhea_tarry" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_diarrhea_foul_smelling" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_constipation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_obstipation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_alternating" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_tenesmus" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_borborygmi" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_haematochezia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_pale_bulky_stools" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_appetite_gain" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_appetite_loss" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_early_satiety" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_jaundice" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_abdomen_blood_in_stool"/>
+                                <field name="symptom_abdomen_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_abdomen_flat" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_scaphoid" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_full" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_distended" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_scarification_marks" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_umbilical_fullness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_distended_veins" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_surgical_scar" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_visible_bowel_movement" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_intact_hernial_orifices" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_hernia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_gravid_tenderness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_rebound_tenderness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_liver" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_spleen" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_kidneys" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_renal_angle" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_kidney_enlargement" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Abdominal mass"/>
+                                <newline/>
+                                <field name="sign_abdomen_abdominal_location" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_abdominal_size" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_abdominal_tenderness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_abdominal_definition" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_abdominal_texture" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_abdominal_pulsatile" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_ascites" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_bowel_sounds" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_perianal_hygiene" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_sphincteric_tone" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_haemorrhoids" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_anal_fissure" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_fistula_in_ano" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_prostate" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_rectal_mass_palpble" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_inspissated_feces_palpable" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_examined_finger_stain" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_abdomen_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Ear, Nose and Throat">                            
+                            <newline/>
+                            <group string="symptoms">
+                                <field name="symptom_ent_ear_discharge" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_ear_pain" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_ear_hearing_loss" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_ear_tinnitus" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_vertigo" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_epistaxis" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_neck_swelling" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_neck_lump" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_choking" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_hoarseness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_ent_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_ent_auricular_lymph" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_ear_discharge" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_tragal_tenderness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_describe_tympanum" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Rinne Test"/>
+                                <newline/>
+                                <field name="sign_ent_rinne_test_left_ear" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_rinne_test_right_ear" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_weber_test" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <separator string="Neck mass" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <newline/>
+                                <field name="sign_ent_neck_mass_position" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_neck_mass_tender" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_neck_mass_temperature" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_neck_mass_texture" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_neck_mass_pulsatile" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_ent_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Genitourinary system">
+                            <newline/>
+                            <group string="symptoms">
+                                <field name="symptom_genitourinary_dysuria" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_foul_smelling_urine" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_increased_frequency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_hesitancy" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_weak_stream" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_intermittency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_terminal_dribbling" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_urgency" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_urge_incontinence" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_straining" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_nocturia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_haematuria" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_splitting_urinary_stream" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_pyuria" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_genital_discharge" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_genital_itching" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_bleeding" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_genitourinary_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_genitourinary_normal_genitalia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_inflammation" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_circumcision" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_genital_cutting" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_meatus" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_urethral_induration" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_chordee" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_perineal_rashes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_genital_sores" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_ambiguous_genitalia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_scrotum" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_cervical_excitatory_tenderness" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_palpable_testes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_hydrocele" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_varicocele" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_genitourinary_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Psychiatry">                            
+                            <newline/>
+                            <group string="Symptoms">
+                                <field name="symptom_psychiatry_low_mood" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_mania" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_mood_swings" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_hallucinations" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_delusions" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_delusions_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_anhedonia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_insomnia_duration" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_insomnia_quality" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_hypersomnolence" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_anxiety" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_phobia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_suicidal_ideations" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_obsessions" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_compulsions" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_anorexia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_bulimia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_thoughts" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_libido" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_guilt" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="symptom_psychiatry_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group string="Signs">
+                                <field name="sign_psychiatry_oriented" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_abnormal_behaviour" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_mood" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_short_term_memory" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_long_term_memory" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_concentration" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_thought" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_tics" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="sign_psychiatry_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Past medical history">                            
+                            <newline/>
+                            <group>
+                                <field name="past_medical_history_sickle_cell" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_diabetes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_hypertension" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_epilepsy" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_dyslipidemia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_tia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_stroke" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_myocardial_infarction" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="past_medical_history_dvt" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_surgeries" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_asthma" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_copd" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_immunization" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_developmental_milestones" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="past_medical_history_others" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Lifestyle">
+                            <newline/>
+                            <group>
+                                <field name="lifestyle_alcohol" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_alcohol_yes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_tobacco" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_tobacco_yes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_recreational_drugs" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_recreational_drugs_yes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_sex" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="lifestyle_coffee" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_coffee_yes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_other_risky_behaviour" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_strict_vegetarian" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_exercise" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="lifestyle_exercise_yes" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Medication history">
+                            <field name="medication_history_current_medications" widget="one2many_list" attrs="{'readonly':['|',('can_edit','=',False),('state', 'in', ['Completed'])]}">
+                                <form string="Current Medications">
+                                    <group>
+                                        <group>
+                                            <field name="name" />
+                                            <field name="start_date" />
+                                            <field name="route" />
+                                            <field name="frequency" />
+                                        </group>
+                                        <group>
+                                            <field name="dose" />
+                                            <field name="dose_unit" />
+                                            <field name="dose_form" />
+                                            <field name="qty" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="Current Medications">
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="dose"/>
+                                    <field name="dose_unit" />
+                                    <field name="dose_form"/>
+                                    <field name="qty" />
+                                    <field name="route" />
+                                    <field name="frequency" />
+                                </tree>
+                            </field>
+                            <field name="medication_history_drug_allergies" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                        </group>
+
+                        <group string="Gynaecological history">
+                            <newline/>
+                            <group>
+                                <field name="gynaecology_last_menses" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="gynaecology_amenorrhea" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="gynaecology_dysmenorrhea" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="gynaecology_menorrhagia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="gynaecology_metromenorrhagia" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="gynaecology_infertility" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                                <field name="gynaecology_subfertility" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+
+                        <group string="Family history">
+                            <field name="family_history_condition" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook/page[4]" position="after">
+                    <page string="Diagnosis" name="Diagnosis">
+                        <group>
+                            <field name="can_edit" groups="oehealth.group_oeh_medical_physician"/>
+                        </group>
+                        <group>
+                            <field name="indication" widget="many2many_tags" options="{'no_create': True}" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Information on Diagnosis">
+                            <field name="info_diagnosis" nolabel="1" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                        </group>
+                        <group string="Treatment Plan">
+                            <field name="directions" nolabel="1" attrs="{'readonly' : ['|',('can_edit','=',False),('state', 'in', ['Completed'])]}"/>
+                        </group>
+                    </page>
+
+                    <page string="Treatment Sheet" name="treatment_sheet">
+                        <group string="Medications Administered">
+                            <field name="treatments_administered" widget="one2many_list" attrs="{'readonly':[('state', 'in', ['Completed'])]}">
+                                <form string="Medications Administered">
+                                    <group>
+                                        <field name="name" />
+                                        <field name="route" />
+                                        <field name="time" />
+                                        <field name="administered_by" />
+                                        <field name="comments" />
+                                    </group>
+                                    <group>
+                                        <field name="dose" />
+                                        <field name="dose_unit" />
+                                        <field name="dose_form" />
+                                        <field name="qty" />
+                                    </group>
+                                </form>
+                                <tree string="Medications Administered">
+                                    <field name="name" />
+                                    <field name="dose" />
+                                    <field name="dose_unit" />
+                                    <field name="dose_form" />
+                                    <field name="qty" />
+                                    <field name="route" />
+                                    <field name="time" />
+                                    <field name="administered_by" />
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Treatments / Procedures Performed">
+                            <field name="procedures_performed" widget="one2many_list" attrs="{'readonly':[('state', 'in', ['Completed'])]}">
+                                <form string="Procedures Performed">
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="site" />
+                                            <field name="time" />
+                                        </group>
+                                        <group>
+                                            <field name="performed_by" />
+                                            <field name="comments" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="Procedures Performed">                                     
+                                    <field name="name"/>
+                                    <field name="site" />
+                                    <field name="time" />
+                                    <field name="performed_by" />
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="IV Procedures Performed">
+                            <field name="iv_procedures_performed" widget="one2many_list" attrs="{'readonly':[('state', 'in', ['Completed'])]}">
+                                <form string="IV Procedures Performed">
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="needle_size" />
+                                            <field name="site" />
+                                            <field name="fluid_type" />
+                                        </group>
+                                        <group>
+                                            <field name="start_time" />
+                                            <field name="end_time" />
+                                            <field name="performed_by" />
+                                            <field name="comments" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="IV Procedures Performed"> 
+                                    <field name="name" />
+                                    <field name="needle_size" />
+                                    <field name="site" />
+                                    <field name="fluid_type" />
+                                    <field name="start_time" />
+                                    <field name="end_time" />
+                                    <field name="performed_by"/>
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    <page string="Clinic Discharge Summary" name="discharge_summary">
+                        <group>
+                            <group>
+                                <field name="discharge_patient_name" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="patient_admission_date" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="discharge_admission_diagnosis" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="discharge_attending_physician" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="discharge_patient_id" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="patient_discharge_date" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="discharge_final_diagnoses" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                                <field name="discharge_condition" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="present_illness_history" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                            <field name="discharge_medications" widget="one2many_list" attrs="{'readonly' : [('state', 'in', ['Completed'])]}">
+                                <form string="Discharge Medications">
+                                    <group>
+                                        <group>
+                                            <field name="name" />
+                                            <field name="dose" />
+                                            <field name="dose_unit" />
+                                            <field name="dose_form" />
+                                            <field name="qty" />
+                                        </group>
+                                        <group>
+                                            <field name="route" />
+                                            <field name="time" />
+                                            <field name="administered_by" />
+                                            <field name="comments" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="Discharge medications">
+                                    <field name="name" />
+                                    <field name="dose" />
+                                    <field name="dose_unit" />
+                                    <field name="dose_form" />
+                                    <field name="qty" />
+                                    <field name="route" />
+                                    <field name="time" />
+                                    <field name="administered_by" />
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                            <field name="discharge_procedures" widget="one2many_list" attrs="{'readonly' : [('state', 'in', ['Completed'])]}">
+                                <form string="Discharge Procedures">
+                                    <group>
+                                        <group>
+                                            <field name="name" />
+                                            <field name="site" />
+                                            <field name="time"/>
+                                        </group>
+                                        <group>
+                                            <field name="performed_by" />
+                                            <field name="comments" />
+                                        </group>
+                                    </group>
+                                </form>
+                                <tree string="Discharge Procedures Performed">   
+                                    <field name="name" />
+                                    <field name="site" />
+                                    <field name="time" />
+                                    <field name="performed_by" />
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                            <field name="discharge_instructions" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                            <field name="discharge_completed_by" attrs="{'readonly' : [('state', 'in', ['Completed'])]}"/>
+                        </group>
+                    </page>
+                    <page string="Extra Information">
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </page>
+
+                    <page string="Addendum">
+                        <group>
+                            <field name="evaluation_addendum"/>
+                        </group>
+                    </page>
+                    
+                </xpath>
+
+                <!--hide last two pages -->
+                <xpath expr="//sheet/notebook/page[last()]" position="replace">
+                    <page invisible="True"></page>
+                </xpath>
+                <xpath expr="//sheet/notebook/page[last()-1]" position="replace">
+                    <page invisible="True"></page>
+                </xpath>    
+                          
+            </field>
+        </record>
+
+        <!-- Revove evaluations from drop down menu -->
+        <menuitem action="oehealth.oeh_medical_evaluation_action_tree" parent="oehealth.oeh_medical_appointment_menu"  id="oehealth.oeh_medical_evaluation_list" 
+        sequence="5" groups="oehealth_extension.group_oeh_hide_menus"/>
+    </odoo>

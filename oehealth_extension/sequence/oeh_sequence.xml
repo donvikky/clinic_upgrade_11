@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="seq_oeha_medical_imaging_test" model="ir.sequence">
+            <field name="name">Imaging Tests</field>
+            <field name="code">oeha.medical.imaging.test</field>
+            <field name="prefix">IM</field>
+            <field name="padding">6</field>
+        </record>
+    </data>
+</openerp>

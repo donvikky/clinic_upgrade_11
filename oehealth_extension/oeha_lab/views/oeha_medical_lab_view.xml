@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+    <odoo>
+        <record id="oeha_medical_lab_test_form" model="ir.ui.view">
+            <field name="name">Extensions to Lab test Form</field>
+            <field name="model">oeh.medical.lab.test</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_lab_test_form"/>
+            <field name="arch" type="xml">
+                <!-- Allow lab scientists to view buttons -->
+                <button name="set_to_test_inprogress" position="replace">
+                    <button confirm="Are you sure you want to start the test?" name="set_to_test_inprogress"
+                    states="Draft" string="Start Test" type="object" class="oe_highlight"
+                    groups="oehealth.group_oeh_medical_physician,oehealth_extension.group_oeh_medical_lab_off"
+                    />
+                </button>
+                <button name="set_to_test_complete" position="replace">
+                    <button confirm="Are you sure you want to complete the test?" name="set_to_test_complete"
+                    states="Test In Progress" string="Complete Test" type="object" class="oe_highlight"
+                    groups="oehealth.group_oeh_medical_physician,oehealth_extension.group_oeh_medical_lab_off"
+                    />
+                </button>
+                <button name="action_lab_invoice_create" position="replace">
+                    <button confirm="Are you sure you want to create the invoice?" name="action_lab_invoice_create"
+                    states="Completed" string="Create Lab Test Invoice" type="object" class="oe_highlight" 
+                    groups="oehealth.group_oeh_medical_physician,oehealth_extension.group_oeh_medical_lab_off"/>
+                </button>
+                <button name="print_patient_labtest" position="replace">
+                    <button name="print_patient_labtest" states="Test In Progress,Completed,Invoiced"
+                     string="Print Lab Test" type="object" class="oe_highlight"
+                     groups="oehealth.group_oeh_medical_physician,oehealth_extension.group_oeh_medical_lab_off"/>
+                </button>
+                <xpath expr="//sheet/group[1]" position="replace">
+                    <group>
+                        <group>
+                            <field name="test_type" on_change="onchange_test_type_id(test_type)" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="lab_department"/>
+                        </group>                        
+                    </group>
+                </xpath>
+
+                <!-- Insert patient ID in form view -->
+                <xpath expr="//sheet/div/div/h1" position="after">
+                    <group>
+                        <field name="identification_code" class="oe_inline"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="oeha_medical_lab_test_tree" model="ir.ui.view">
+            <field name="name">Extensions to Lab test tree view</field>
+            <field name="model">oeh.medical.lab.test</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_lab_test_tree"/>
+            <field name="arch" type="xml">
+                <field name="patient" position="before">
+                    <field name="identification_code"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="oeha_medical_lab_test_types_form" model="ir.ui.view">
+            <field name="name">Extensions to Lab test types Form</field>
+            <field name="model">oeh.medical.labtest.types</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_lab_test_types_form"/>
+            <field name="arch" type="xml">
+                <field name="lab_department" position="replace">
+                    <field name="lab_department"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="oeha_medical_lab_test_filter" model="ir.ui.view">
+            <field name="name">Lab Tests Tree Extension</field>
+            <field name="model">oeh.medical.lab.test</field>
+            <field name="inherit_id" ref="oehealth.view_oeh_medical_lab_test_filter"/>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="patient" string="Patient" select="1"/>
+                    <field name="identification_code" string="Patient ID" select="1"/>
+                </field>
+            </field>
+        </record>
+
+    </odoo>
