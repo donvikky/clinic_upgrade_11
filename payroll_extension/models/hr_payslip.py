@@ -8,7 +8,7 @@ class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
     _description = 'Pay Slip Extension'
 
-    worked_days_in_month = fields.Integer(string="Days worked", help="Number of days worked in month", default="21")
+    worked_days_in_month = fields.Integer(string="Days worked", help="Number of days worked in this very month", default="21")
 
     @api.constrains('worked_days_in_month')
     def _check_worked_days(self):
